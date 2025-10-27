@@ -1,0 +1,9 @@
+# Python virtual environment folder
+venv/
+
+# Ignore SQLite database file
+*.db
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
