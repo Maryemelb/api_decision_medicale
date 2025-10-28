@@ -9,28 +9,29 @@ from sklearn.compose import ColumnTransformer
 def data_preparation(data):
       data['status']= data['status'].map({'negative':0, 'positive':1})
       return data
-data= pd.read_csv('../data/dataset.csv')
+data= pd.read_csv('./data/dataset.csv')
 data['status']= data['status'].map({'negative':0, 'positive':1})
 
 X= data.drop(columns='status')
 y= data['status']
 X_train, X_test, y_train, y_test= train_test_split( X,y, test_size=0.3, random_state=42)
 preprocessor= ColumnTransformer(
-'X_num',StandardScaler(),X.columns
+      transformers=[('X_num',StandardScaler(),X.columns)]
 )
 #hyper parametre logistic regression
 hyper_param= {
-      'classification_max_iter': [50,80,100],
-      'classification_C': [1,2,3]
+      'classification__n_estimators': [50,80,100],
+      'classification__max_depth': [1,10,100]
 }
+from sklearn.ensemble import RandomForestClassifier
 pipeline_lr= Pipeline([
 ('preprocessor',preprocessor),
 ('select_best_features', SelectKBest(score_func=f_classif, k=4)),
-('classification', LogisticRegression())
+('classification', RandomForestClassifier())
 ])
-greadsearch= GridSearchCV(pipeline_lr,hyper_param, cv=4, scoring='Accuracy')
+greadsearch= GridSearchCV(pipeline_lr,hyper_param, cv=4, scoring='accuracy')
 greadsearch.fit(X_train, y_train)
-y_pred= GridSearchCV.predict(X_train)
+y_pred= greadsearch.predict(X_test)
 print('Accuracy: ', metrics.accuracy_score(y_pred, y_test))
 print('recall: ',metrics.recall_score(y_pred, y_test))
 print('f1: ',metrics.f1_score(y_pred, y_test))
