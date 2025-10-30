@@ -1,8 +1,65 @@
-from fastapi import FastAPI
-app= FastAPI()
+from fastapi import Depends, FastAPI, HTTPException
+from pydantic import BaseModel
+from sqlalchemy import Column, Integer, create_engine
+from sqlalchemy.orm import sessionmaker
+import sqlalchemy
+import sqlalchemy.orm
+from sqlalchemy.orm import sessionmaker, Session
+from app.models import Patient
+from sqlalchemy.ext.declarative import declarative_base
+from app.database import engine, Database_url, sessionLocal, Base
+app= FastAPI(title='api prediction')
+
+Base.metadata.create_all(bind=engine)
+
+class Create_Patient(BaseModel):
+    age: int
+    gender:int
+    pressurehight: int
+    pressurelow: int
+    glucose: int
+    kcm: float
+    troponin: float
+    impluse: int
+class get_patient(BaseModel):
+    # id = int
+    age: int
+    gender:int
+    pressurehight: int
+    pressurelow: int
+    glucose: int
+    kcm: float
+    troponin: float
+    impluse: int
+
+def get_db():
+    db=sessionLocal()
+    try:
+        yield db
+    finally:
+        db.close
+
 @app.get('/')
 async def index():
     return "hello"
 @app.get('/prediction')
 async def prediction():
     return "pred"
+@app.post('/patients')
+async def add_patient(patient: Create_Patient, db:Session= Depends(get_db)):
+        db_item=Patient(**patient.model_dump()) #returns a dictionary of the fields and their values
+        db.add(db_item)
+        db.commit()
+        db.refresh(db_item)
+        return db_item
+
+@app.get('/patient')
+async def get_patients(db: Session= Depends(get_db)):
+     item=db.query(Patient).all()
+     if item is None:
+          raise HTTPException(status_code=404, detail="item not found")
+     return item
+@app.post('/predict_risk')
+# async def predict_status():
+#     prediction=    
+
