@@ -46,9 +46,7 @@ def get_db():
 @app.get('/')
 async def index():
     return "hello"
-@app.get('/prediction')
-async def prediction():
-    return "pred"
+
 @app.post('/patients')
 async def add_patient(patient: Create_Patient, db:Session= Depends(get_db)):
         db_item=Patient(**patient.model_dump()) #returns a dictionary of the fields and their values
@@ -71,7 +69,10 @@ async def predict_status(patient: Create_Patient):
     data= pd.DataFrame([patient.dict()])
     predict1= model.predict(data)
     print("prediction",predict1)
-    return patient
+    if predict1==1:
+        return "Ce patient est a risque élevé d'avoir une maladi cardiovasculaire"
+    else:
+        return "Ce patient n a pas de risque d'avoir une maladi cardiovasculaire"
 
      
 
