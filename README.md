@@ -89,7 +89,7 @@ uvicorn app.main:app --reload
 📤 Exemple de Requête /predict_risk
 ✅ Requête :
 POST /predict_risk
-  `{
+{
   "age": 45,
   "gender": 1,
   "pressurehight": 14,
@@ -98,41 +98,4 @@ POST /predict_risk
   "kcm": 1.3,
   "troponin": 1.2,
   "impluse": 7
-   }`
-💬 Réponse attendue :
-"Ce patient n a pas de risque d'avoir une maladi cardiovasculaire"
-🧩 Modalités Pédagogiques
-
-Projet réalisé en binôme :
-
-Collaboration, répartition des rôles et gestion de versions via GitHub.
-
-Objectif pédagogique : maîtriser la mise en œuvre d’une API complète alliant FastAPI, SQLite et Machine Learning.
-
-📅 Durée du projet : 5 jours
-🗓️ Du 27/10/2025 au 31/10/2025
-
-🛠️ Outils Utilisés
-
-FastAPI
-
-SQLite
-
-SQLAlchemy
-
-Pydantic
-
-Scikit-Learn
-
-Joblib
-
-Pytest
-
-Swagger
-
-GitHub
-
-👥 Auteurs
-
-👩‍💻 Développeur Backend – [Maryem Elbergui]
-🤖 Développeur IA/Data – [Chaima Zbairi]
+}
