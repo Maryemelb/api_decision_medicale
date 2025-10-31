@@ -9,17 +9,16 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 
-
-def data_preparation(data):
-      data['status']= data['status'].map({'negative':0, 'positive':1})
-      return data
+# data_preparation
 data= pd.read_csv('./data/dataset.csv')
 data['status']= data['status'].map({'negative':0, 'positive':1})
 
+#split data
 X= data.drop(columns='status')
 y= data['status']
 X_train, X_test, y_train, y_test= train_test_split( X,y, test_size=0.3, random_state=42)
 
+#Normalisation
 preprocessor= ColumnTransformer(
       transformers=[('X_num',StandardScaler(),X.columns)]
 )
@@ -30,6 +29,7 @@ hyper_param= {
       'classification__max_depth': [1,10,100]
 }
 
+#piprline
 pipeline_lr= Pipeline([
 ('preprocessor',preprocessor),
 ('select_best_features', SelectKBest(score_func=f_classif, k=4)),
@@ -39,6 +39,8 @@ pipeline_lr= Pipeline([
 greadsearch= GridSearchCV(pipeline_lr,hyper_param, cv=4, scoring='accuracy')
 greadsearch.fit(X_train, y_train)
 y_pred= greadsearch.predict(X_test)
+
+#metrics
 print('Accuracy: ', metrics.accuracy_score(y_pred, y_test))
 print('recall: ',metrics.recall_score(y_pred, y_test))
 print('f1: ',metrics.f1_score(y_pred, y_test))
