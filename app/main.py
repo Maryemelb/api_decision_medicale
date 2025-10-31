@@ -8,6 +8,10 @@ from sqlalchemy.orm import sessionmaker, Session
 from app.models import Patient
 from sqlalchemy.ext.declarative import declarative_base
 from app.database import engine, Database_url, sessionLocal, Base
+import joblib 
+import pandas as pd
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
 app= FastAPI(title='api prediction')
 
 Base.metadata.create_all(bind=engine)
@@ -60,6 +64,14 @@ async def get_patients(db: Session= Depends(get_db)):
           raise HTTPException(status_code=404, detail="item not found")
      return item
 @app.post('/predict_risk')
-# async def predict_status():
-#     prediction=    
+async def predict_status(patient: Create_Patient):
+    model= joblib.load('app/classification_model.pkl')  
+    #patient is a pandantic object
+    # data= patient.values()
+    data= pd.DataFrame([patient.dict()])
+    predict1= model.predict(data)
+    print("prediction",predict1)
+    return patient
+
+     
 

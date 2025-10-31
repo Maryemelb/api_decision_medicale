@@ -10,3 +10,4 @@ scikit_learn
 joblib
 fastapi
 uvicorn
+httpx
