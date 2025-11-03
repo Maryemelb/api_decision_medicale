@@ -32,11 +32,11 @@ hyper_param= {
 #piprline
 pipeline_lr= Pipeline([
 ('preprocessor',preprocessor),
-('select_best_features', SelectKBest(score_func=f_classif, k=4)),
+('select_best_features', SelectKBest(score_func=f_classif, k=6)),
 ('classification', RandomForestClassifier())
 ])
 
-greadsearch= GridSearchCV(pipeline_lr,hyper_param, cv=4, scoring='accuracy')
+greadsearch= GridSearchCV(pipeline_lr,hyper_param, cv=4, scoring='f1')
 greadsearch.fit(X_train, y_train)
 y_pred= greadsearch.predict(X_test)
 

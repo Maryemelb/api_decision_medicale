@@ -1,19 +1,13 @@
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import Column, Integer, create_engine
-from sqlalchemy.orm import sessionmaker
-import sqlalchemy
-import sqlalchemy.orm
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import  Session
 from app.models import Patient
-from sqlalchemy.ext.declarative import declarative_base
-from app.database import engine, Database_url, sessionLocal, Base
+from app.database import engine,sessionLocal, Base
 import joblib 
 import pandas as pd
 from fastapi import FastAPI
-from fastapi.testclient import TestClient
-app= FastAPI(title='api prediction')
 
+app= FastAPI(title='api prediction')
 Base.metadata.create_all(bind=engine)
 
 class Create_Patient(BaseModel):
