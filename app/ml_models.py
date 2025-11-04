@@ -4,7 +4,6 @@ from sklearn.discriminant_analysis import StandardScaler
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 import joblib

@@ -19,16 +19,6 @@ class Create_Patient(BaseModel):
     kcm: float
     troponin: float
     impluse: int
-class get_patient(BaseModel):
-    # id = int
-    age: int
-    gender:int
-    pressurehight: int
-    pressurelow: int
-    glucose: int
-    kcm: float
-    troponin: float
-    impluse: int
 
 def get_db():
     db=sessionLocal()
@@ -67,6 +57,3 @@ async def predict_status(patient: Create_Patient):
         return "Ce patient est a risque élevé d'avoir une maladi cardiovasculaire"
     else:
         return "Ce patient n a pas de risque d'avoir une maladi cardiovasculaire"
-
-     
-
