@@ -7,10 +7,10 @@ import joblib
 import pandas as pd
 from fastapi import FastAPI
 
-app= FastAPI(title='api prediction')
+app= FastAPI(title='api prediction') 
 Base.metadata.create_all(bind=engine)
 
-class Create_Patient(BaseModel):
+class Create_Patient(BaseModel): 
     age: int
     gender:int
     pressurehight: int
@@ -20,7 +20,7 @@ class Create_Patient(BaseModel):
     troponin: float
     impluse: int
 
-def get_db():
+def get_db(): 
     db=sessionLocal()
     try:
         yield db
@@ -31,29 +31,35 @@ def get_db():
 async def index():
     return "hello"
 
+
 @app.post('/patients')
 async def add_patient(patient: Create_Patient, db:Session= Depends(get_db)):
-        db_item=Patient(**patient.model_dump()) #returns a dictionary of the fields and their values
-        db.add(db_item)
-        db.commit()
-        db.refresh(db_item)
-        return db_item
+        # ENDPOINT: POST request to /patients
+        db_item=Patient(**patient.model_dump()) 
+        db.add(db_item) 
+        db.commit() 
+        db.refresh(db_item) 
+        return db_item  
+
+
 
 @app.get('/patient')
 async def get_patients(db: Session= Depends(get_db)):
-     item=db.query(Patient).all()
+     item=db.query(Patient).all() 
      if item is None:
           raise HTTPException(status_code=404, detail="item not found")
-     return item
+     return item  
+
+
+
 @app.post('/predict_risk')
 async def predict_status(patient: Create_Patient):
     model= joblib.load('app/classification_model.pkl')  
-    #patient is a pandantic object
-    # data= patient.values()
-    data= pd.DataFrame([patient.dict()])
-    predict1= model.predict(data)
+
+    data= pd.DataFrame([patient.model_dump()]) 
+    predict1= model.predict(data) 
     print("prediction",predict1)
     if predict1==1:
         return "Ce patient est a risque élevé d'avoir une maladi cardiovasculaire"
     else:
-        return "Ce patient n a pas de risque d'avoir une maladi cardiovasculaire"
+        return "Ce patient n a  pas de risque d'avoir une maladi cardiovasculaire"
